@@ -106,7 +106,8 @@ public class MyBatter {
 	 */
 	private static void printHelp(Options options) {
 		new HelpFormatter().printHelp(
-				"java -jar mybatter.jar [options] [ file|directory [ file|directory] ... ]", options, true);
+				"java -jar mybatter-<version>-jar-with-dependencies.jar [options] [ file|directory [ file|directory ] ... ]",
+				options, true);
 	}
 
 	/**
