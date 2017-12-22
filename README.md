@@ -23,6 +23,28 @@ Add MyBatter to your [Maven](https://maven.apache.org/) dependencies:
       <scope>test</scope>
     </dependency>
 
+If you want to use a [snapshot version of MyBatter](https://oss.sonatype.org/#nexus-search;quick~mybatter) please allow snapshots from [Sonatype](https://oss.sonatype.org/):
+
+	<profile>
+		<id>allow-snapshots</id>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+		</activation>
+		<repositories>
+			<repository>
+				<id>snapshots-repo</id>
+				<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				<releases>
+					<enabled>false</enabled>
+				</releases>
+				<snapshots>
+					<enabled>true</enabled>
+				</snapshots>
+			</repository>
+		</repositories>
+	</profile>
+
+
 Run `mvn install` on your project at least once after adding MyBatter to your `pom.xml`. This downloads MyBatter to your local repository. Afterwards you can run MyBatter from there.
 
 ## Format mapper XML files automatically (in Eclipse)
