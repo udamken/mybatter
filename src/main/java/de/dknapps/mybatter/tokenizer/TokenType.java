@@ -113,6 +113,8 @@ public enum TokenType {
 
 	/**
 	 * Returns true for a parent token type.
+	 * 
+	 * @return If token type is a parent token type.
 	 */
 	public boolean isParentTokenType() {
 		return parentTokenType == null;

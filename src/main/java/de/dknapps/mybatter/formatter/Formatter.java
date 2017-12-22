@@ -325,6 +325,7 @@ public class Formatter {
 	 * Writes a string to the output and increase lineLine accordingly.
 	 * 
 	 * @param string
+	 *            String to be written
 	 */
 	public void write(String string) {
 		output.write(string);

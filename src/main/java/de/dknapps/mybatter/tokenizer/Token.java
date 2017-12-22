@@ -196,8 +196,8 @@ public class Token {
 	/**
 	 * Returns true if content would be an xml tag suffix if ending were appended to the content.
 	 * 
-	 * @param The
-	 *            ending assumed to be appended to the content.
+	 * @param ending
+	 *            The ending assumed to be appended to the content.
 	 * @return True if content plus ending ends with SUFFIX_PROCESSING_INSTRUCTION or
 	 *         SUFFIX_SELFCLOSING_XML_TAG.
 	 */
@@ -217,7 +217,7 @@ public class Token {
 	/**
 	 * Return the value of the first subtoken or the value of token itself as the name of the token.
 	 * 
-	 * @return The name of the token, e.g. mapper for <mapper> or select for select
+	 * @return The name of the token, e.g. mapper (XML) or select (SQL)
 	 */
 	public String tokenName() {
 		String tokenName;
