@@ -44,6 +44,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
 import static de.dknapps.mybatter.tokenizer.TokenType.ROOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_XML_TAG;
+import static de.dknapps.mybatter.tokenizer.TokenType.SQL_AND_IN_BETWEEN;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_STATEMENT_SUFFIX;
 import static de.dknapps.mybatter.tokenizer.TokenType.STRING;
@@ -89,6 +90,30 @@ public class TokenTypeDeterminer {
 	 * Sets up static final maps.
 	 */
 	static {
+		RESOLVER_MAP.put("and", new AmbiguousTokenTypeResolver() {
+
+			@Override
+			public void resolve(Token token, List<Token> beforeTokenList, List<Token> afterTokenList) {
+				for (int i = beforeTokenList.size() - 1; i >= 0; i--) {
+					Token previousToken = beforeTokenList.get(i);
+					switch (previousToken.getTokenType()) {
+					case TERM:
+						if (previousToken.tokenName().equals("between")) {
+							token.setTokenType(SQL_AND_IN_BETWEEN);
+							return; // between operator found
+						}
+						// intentionally falling through
+					case SQL_SUB_STATEMENT:
+					case SQL_STATEMENT:
+					case PRIMARY_XML_TAG:
+						return; // stop looking for between operator
+					default:
+						// go backwards to next token
+					}
+				}
+			}
+
+		});
 		RESOLVER_MAP.put("from", new AmbiguousTokenTypeResolver() {
 
 			@Override

@@ -36,6 +36,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.ROOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_ENCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_PRIMARY_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_XML_TAG;
+import static de.dknapps.mybatter.tokenizer.TokenType.SQL_AND_IN_BETWEEN;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMBINING_STATEMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_DYADIC_OPERATOR;
@@ -154,6 +155,7 @@ public class Formatter {
 		addFormats(SQL_STATEMENT, new Format(1, 0, 0), new Format(1, 1, 0));
 		addFormats(SQL_SUB_STATEMENT, new Format(1, -1, 0), new Format(1, 1, 0));
 		addFormats(SQL_DYADIC_OPERATOR, new Format(1, 0, 0), new Format(0, 0, 1));
+		addFormats(SQL_AND_IN_BETWEEN, SPACE, SPACE);
 		addFormats(SQL_COMBINING_STATEMENT, new Format(2, -1, 0), new Format(2, 0, 0));
 
 		addFormats(SQL_STATEMENT_SUFFIX, SPACE, retrieveAfterFormat(SQL_STATEMENT));

@@ -23,12 +23,14 @@ import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PRIMARY_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.COMMA;
 import static de.dknapps.mybatter.tokenizer.TokenType.DOCUMENT_DECLARATION;
+import static de.dknapps.mybatter.tokenizer.TokenType.DOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.ENCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.MYBATIS_REFERENCE;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
 import static de.dknapps.mybatter.tokenizer.TokenType.ROOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_ENCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMMENT;
+import static de.dknapps.mybatter.tokenizer.TokenType.SQL_DYADIC_OPERATOR;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_STATEMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_SUB_STATEMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_SUB_STATEMENT_SUFFIX;
@@ -59,24 +61,38 @@ public class TokenizerTest extends TestCase {
 				"  |join|" + SQL_SUB_STATEMENT, //
 				"  |table2|" + TERM, //
 				"  |on|" + SQL_SUB_STATEMENT, //
-				"  |table1.a|" + TERM, //
+				"  |table1|" + TERM, //
+				"  |.|" + DOT, //
+				"  |a|" + TERM, //
 				"  |=|" + TERM, //
-				"  |table2.a|" + TERM, //
-				"  |and|" + TERM, //
-				"  |table1.b|" + TERM, //
+				"  |table2|" + TERM, //
+				"  |.|" + DOT, //
+				"  |a|" + TERM, //
+				"  |and|" + SQL_DYADIC_OPERATOR, //
+				"  |table1|" + TERM, //
+				"  |.|" + DOT, //
+				"  |b|" + TERM, //
 				"  |=|" + TERM, //
-				"  |table2.b|" + TERM, //
+				"  |table2|" + TERM, //
+				"  |.|" + DOT, //
+				"  |b|" + TERM, //
 				"  |where|" + SQL_SUB_STATEMENT, //
-				"  |table1.a|" + TERM, //
+				"  |table1|" + TERM, //
+				"  |.|" + DOT, //
+				"  |a|" + TERM, //
 				"  |=|" + TERM, //
 				"  |'X'|" + STRING, //
-				"  |and|" + TERM, //
-				"  |table1.b|" + TERM, //
+				"  |and|" + SQL_DYADIC_OPERATOR, //
+				"  |table1|" + TERM, //
+				"  |.|" + DOT, //
+				"  |b|" + TERM, //
 				"  |=|" + TERM, //
 				"  |1|" + TERM, //
 				"  |order|" + SQL_SUB_STATEMENT, //
 				"  |by|" + SQL_SUB_STATEMENT_SUFFIX, //
-				"  |table1.a|" + TERM, //
+				"  |table1|" + TERM, //
+				"  |.|" + DOT, //
+				"  |a|" + TERM, //
 				"  |with|" + SQL_SUB_STATEMENT, //
 				"  |ur|" + SQL_SUB_STATEMENT_SUFFIX, //
 				"  |</mapper>|" + CLOSING_ENCLOSING_XML_TAG, //
@@ -347,7 +363,7 @@ public class TokenizerTest extends TestCase {
 		String input = "AND A = B -- OR C = D";
 		String output[] = new String[] { //
 				"|...|" + ROOT, //
-				"  |AND|" + TERM, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
 				"  |A|" + TERM, //
 				"  |=|" + TERM, //
 				"  |B|" + TERM, //
@@ -361,12 +377,12 @@ public class TokenizerTest extends TestCase {
 		String input = "AND A = B -- OR C = D\nAND C = D";
 		String output[] = new String[] { //
 				"|...|" + ROOT, //
-				"  |AND|" + TERM, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
 				"  |A|" + TERM, //
 				"  |=|" + TERM, //
 				"  |B|" + TERM, //
 				"  |-- OR C = D|" + SQL_COMMENT, //
-				"  |AND|" + TERM, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
 				"  |C|" + TERM, //
 				"  |=|" + TERM, //
 				"  |D|" + TERM //
@@ -379,12 +395,12 @@ public class TokenizerTest extends TestCase {
 		String input = "AND A = B\n-- OR C = D\nAND C = D";
 		String output[] = new String[] { //
 				"|...|" + ROOT, //
-				"  |AND|" + TERM, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
 				"  |A|" + TERM, //
 				"  |=|" + TERM, //
 				"  |B|" + TERM, //
 				"  |-- OR C = D|" + SQL_COMMENT, //
-				"  |AND|" + TERM, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
 				"  |C|" + TERM, //
 				"  |=|" + TERM, //
 				"  |D|" + TERM //

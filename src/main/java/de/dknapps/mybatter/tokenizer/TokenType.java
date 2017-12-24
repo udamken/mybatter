@@ -65,6 +65,7 @@ public enum TokenType {
 	SQL_SUB_STATEMENT(TERM, "from", "group", "having", "join", "on", "order", "set", "values", "where",
 			"with"),
 	SQL_DYADIC_OPERATOR(TERM, "and", "or"),
+	SQL_AND_IN_BETWEEN(TERM, "and"),
 	SQL_COMBINING_STATEMENT(TERM, "union"),
 	SQL_STATEMENT_SUFFIX(TERM, "all", "distinct", "from", "into"),
 	SQL_SUB_STATEMENT_PREFIX(TERM, "left", "right", "outer", "inner"),

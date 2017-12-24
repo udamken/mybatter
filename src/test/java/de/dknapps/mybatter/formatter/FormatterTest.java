@@ -415,12 +415,9 @@ public class FormatterTest {
 		String[] lines = new String[] { //
 				"a between 'B' and 'C'" };
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
-		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-				"Line break before AND of BETWEEN");
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 	}
 
 	@Test

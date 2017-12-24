@@ -28,6 +28,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMMENT;
+import static de.dknapps.mybatter.tokenizer.TokenType.SQL_DYADIC_OPERATOR;
 import static de.dknapps.mybatter.tokenizer.TokenType.STRING;
 import static de.dknapps.mybatter.tokenizer.TokenType.TERM;
 import static de.dknapps.mybatter.tokenizer.TokenType.XML_COMMENT;
@@ -109,7 +110,7 @@ public class TokenTypeDeterminerTest {
 
 	@Test
 	public void test_deriveTokenTypeFromValue_dot() {
-		assertTokenType(",", DOT);
+		assertTokenType(".", DOT);
 	}
 
 	@Test
@@ -131,7 +132,7 @@ public class TokenTypeDeterminerTest {
 		assertTokenType("x,", TERM);
 		assertTokenType(",x", TERM);
 		assertTokenType("select", TokenType.SQL_STATEMENT);
-		assertTokenType("and", TERM);
+		assertTokenType("and", SQL_DYADIC_OPERATOR);
 		assertTokenType("gobbledegook", TERM);
 		assertTokenType("${variable}", MYBATIS_REFERENCE);
 		assertTokenType("#{variable}", MYBATIS_REFERENCE);
