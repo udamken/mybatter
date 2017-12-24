@@ -31,12 +31,14 @@ import static de.dknapps.mybatter.tokenizer.Token.PREFIX_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_SELFCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_CLOSING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_COMMA;
+import static de.dknapps.mybatter.tokenizer.Token.VALUE_DOT;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.CHARACTER_DATA;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.COMMA;
 import static de.dknapps.mybatter.tokenizer.TokenType.DOCUMENT_DECLARATION;
+import static de.dknapps.mybatter.tokenizer.TokenType.DOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.MYBATIS_REFERENCE;
 import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
@@ -203,6 +205,8 @@ public class TokenTypeDeterminer {
 			tokenType = SQL_COMMENT;
 		} else if (value.equals(VALUE_COMMA)) {
 			tokenType = COMMA;
+		} else if (value.equals(VALUE_DOT)) {
+			tokenType = DOT;
 		} else if (value.equals(VALUE_OPENING_PARENTHESIS)) {
 			tokenType = OPENING_PARENTHESIS;
 		} else if (value.equals(VALUE_CLOSING_PARENTHESIS)) {

@@ -26,6 +26,9 @@ public class Format {
 	/** Format for just a space without newlines or blanks */
 	public static final Format SPACE = new Format(0, 0, 1);
 
+	/** Format for neither space nor newlines nor blanks */
+	public static final Format CLOSE_BY = new Format(0, 0, 0);
+
 	/** Number of line breaks to be written when writing this format */
 	@Getter
 	private final int newlineCount;

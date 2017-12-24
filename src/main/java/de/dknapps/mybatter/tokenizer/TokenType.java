@@ -39,6 +39,7 @@ public enum TokenType {
 	STRING,
 	SQL_COMMENT,
 	COMMA,
+	DOT,
 	OPENING_PARENTHESIS,
 	CLOSING_PARENTHESIS,
 	TERM,
@@ -63,10 +64,8 @@ public enum TokenType {
 	SQL_STATEMENT(TERM, "select", "update", "insert", "delete"),
 	SQL_SUB_STATEMENT(TERM, "from", "group", "having", "join", "on", "order", "set", "values", "where",
 			"with"),
+	SQL_DYADIC_OPERATOR(TERM, "and", "or"),
 	SQL_COMBINING_STATEMENT(TERM, "union"),
-
-	// Context dependend types
-
 	SQL_STATEMENT_SUFFIX(TERM, "all", "distinct", "from", "into"),
 	SQL_SUB_STATEMENT_PREFIX(TERM, "left", "right", "outer", "inner"),
 	SQL_SUB_STATEMENT_SUFFIX(TERM, "by", "cs", "rr", "rs", "ur");

@@ -73,6 +73,8 @@ public class Token {
 
 	static final String VALUE_COMMA = ",";
 
+	static final String VALUE_DOT = ".";
+
 	static final String VALUE_SPACE = " ";
 
 	static final String VALUE_OPENING_PARENTHESIS = "(";

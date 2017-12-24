@@ -22,6 +22,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.COMMA;
 import static de.dknapps.mybatter.tokenizer.TokenType.DOCUMENT_DECLARATION;
+import static de.dknapps.mybatter.tokenizer.TokenType.DOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.MYBATIS_REFERENCE;
 import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
@@ -102,8 +103,13 @@ public class TokenTypeDeterminerTest {
 	}
 
 	@Test
-	public void test_deriveTokenTypeFromValue_sqlValueDelimiter() {
+	public void test_deriveTokenTypeFromValue_comma() {
 		assertTokenType(",", COMMA);
+	}
+
+	@Test
+	public void test_deriveTokenTypeFromValue_dot() {
+		assertTokenType(",", DOT);
 	}
 
 	@Test

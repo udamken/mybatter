@@ -17,6 +17,7 @@
  */
 package de.dknapps.mybatter.formatter;
 
+import static de.dknapps.mybatter.formatter.Format.CLOSE_BY;
 import static de.dknapps.mybatter.formatter.Format.SPACE;
 import static de.dknapps.mybatter.tokenizer.TokenType.CHARACTER_DATA;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_ENCLOSING_XML_TAG;
@@ -25,6 +26,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PRIMARY_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.COMMA;
 import static de.dknapps.mybatter.tokenizer.TokenType.DOCUMENT_DECLARATION;
+import static de.dknapps.mybatter.tokenizer.TokenType.DOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.ENCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.MYBATIS_REFERENCE;
 import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
@@ -36,6 +38,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_PRIMARY_XML_TA
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMBINING_STATEMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_COMMENT;
+import static de.dknapps.mybatter.tokenizer.TokenType.SQL_DYADIC_OPERATOR;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_STATEMENT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_STATEMENT_SUFFIX;
 import static de.dknapps.mybatter.tokenizer.TokenType.SQL_SUB_STATEMENT;
@@ -126,6 +129,7 @@ public class Formatter {
 		addFormats(STRING, SPACE, SPACE);
 		addFormats(SQL_COMMENT, new Format(0, 0, 1), new Format(1, 0, 0));
 		addFormats(COMMA, new Format(0, 0, 0), new Format(1, 0, 0));
+		addFormats(DOT, CLOSE_BY, CLOSE_BY);
 		addFormats(OPENING_PARENTHESIS, new Format(0, 0, 0), new Format(1, 1, 0));
 		addFormats(CLOSING_PARENTHESIS, new Format(1, -1, 0), new Format(1, 0, 0));
 		addFormats(TERM, SPACE, SPACE);
@@ -146,9 +150,10 @@ public class Formatter {
 
 		// Subtoken types (TERM)
 
-		addFormats(MYBATIS_REFERENCE, retrieveBeforeFormat(TERM), retrieveAfterFormat(TERM));
+		addFormats(MYBATIS_REFERENCE, SPACE, SPACE);
 		addFormats(SQL_STATEMENT, new Format(1, 0, 0), new Format(1, 1, 0));
 		addFormats(SQL_SUB_STATEMENT, new Format(1, -1, 0), new Format(1, 1, 0));
+		addFormats(SQL_DYADIC_OPERATOR, new Format(1, 0, 0), new Format(0, 0, 1));
 		addFormats(SQL_COMBINING_STATEMENT, new Format(2, -1, 0), new Format(2, 0, 0));
 
 		addFormats(SQL_STATEMENT_SUFFIX, SPACE, retrieveAfterFormat(SQL_STATEMENT));

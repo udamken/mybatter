@@ -35,6 +35,7 @@ import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_SINGLE_STRING;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_XML_COMMENT;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_COMMA;
+import static de.dknapps.mybatter.tokenizer.Token.VALUE_DOT;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_SPACE;
 import static de.dknapps.mybatter.tokenizer.TokenizerAction.CONSUME;
 import static de.dknapps.mybatter.tokenizer.TokenizerAction.CONSUME_AND_RECURSE_AND_RETURN_TOKEN;
@@ -298,6 +299,11 @@ public class Tokenizer {
 			}
 			return CONSUME_AND_RECURSE_AND_RETURN_TOKEN;
 		} else if (upcomingStartsWith(VALUE_COMMA)) {
+			if (!token.isEmpty()) {
+				return RETURN_PREVIOUS_TOKEN;
+			}
+			return CONSUME_AND_RETURN_TOKEN;
+		} else if (upcomingStartsWith(VALUE_DOT)) {
 			if (!token.isEmpty()) {
 				return RETURN_PREVIOUS_TOKEN;
 			}

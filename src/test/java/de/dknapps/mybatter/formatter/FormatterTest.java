@@ -393,11 +393,9 @@ public class FormatterTest {
 				"AND b = 'B'" //
 		};
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
-		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "No line break before AND");
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 	}
 
 	@Test
@@ -407,25 +405,22 @@ public class FormatterTest {
 				"AND b = 'B'" //
 		};
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
-		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "No line break before OR");
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 	}
 
 	@Test
 	public void test_format_andInBetween() {
 		String[] lines = new String[] { //
-				"a = 'A'", //
-				"AND b between 'B' and 'C'", //
-				"AND c = 3" };
+				"a between 'B' and 'C'" };
 		// compact(lines) removes all separators, hence it cannot work
 		// checkResultLines(lines, new Formatter().format(compressed(lines)));
 		// checkResultLines(lines, new Formatter().format(regular(lines)));
 		// checkResultLines(lines, new Formatter().format(expanded(lines)));
 		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "No line break for AND/OR");
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"Line break before AND of BETWEEN");
 	}
 
 	@Test
@@ -735,12 +730,9 @@ public class FormatterTest {
 				"</delete>" //
 		};
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
-		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-				"New line before FROM, no new line before AND");
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 	}
 
 	private String compact(String[] lines) {
