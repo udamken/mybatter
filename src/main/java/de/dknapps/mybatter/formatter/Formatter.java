@@ -273,7 +273,7 @@ public class Formatter {
 	}
 
 	/**
-	 * Join two consecutive formats into one by of aggregation their linefeeds and indentions.
+	 * Join two consecutive formats into one by aggregating their linefeeds and indentions.
 	 * 
 	 * @param first
 	 *            The first format.
@@ -283,9 +283,20 @@ public class Formatter {
 	 */
 	private Format joinFormats(Format first, Format second) {
 		int linefeedCount = Math.max(first.getNewlineCount(), second.getNewlineCount());
-		int indentionDelta = first.getIndentionDelta() + second.getIndentionDelta();
+		int indentionDelta;
+		boolean stackIndention;
+		if (first.isStackIndention() && !second.isStackIndention()) {
+			indentionDelta = first.getIndentionDelta();
+			stackIndention = true;
+		} else if (second.isStackIndention() && !first.isStackIndention()) {
+			indentionDelta = second.getIndentionDelta();
+			stackIndention = true;
+		} else {
+			// No stack indention at all or for both which cancels each other out
+			indentionDelta = first.getIndentionDelta() + second.getIndentionDelta();
+			stackIndention = false;
+		}
 		int blankCount = Math.min(first.getBlankCount(), second.getBlankCount());
-		boolean stackIndention = first.isStackIndention() || second.isStackIndention();
 		return new Format(linefeedCount, indentionDelta, blankCount, stackIndention);
 	}
 

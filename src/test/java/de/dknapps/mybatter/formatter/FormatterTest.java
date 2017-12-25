@@ -335,12 +335,12 @@ public class FormatterTest {
 				"\tWITH UR", //
 				"</select>" };
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-				"Closing select xml tag erroneously indented");
+		// printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+		// "Closing select xml tag erroneously indented");
 	}
 
 	@Test
