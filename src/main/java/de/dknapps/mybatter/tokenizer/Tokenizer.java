@@ -34,8 +34,10 @@ import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_MYBATIS_REFERENCE;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_SINGLE_STRING;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_XML_COMMENT;
 import static de.dknapps.mybatter.tokenizer.Token.SUFFIX_XML_TAG;
+import static de.dknapps.mybatter.tokenizer.Token.VALUE_CLOSING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_COMMA;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_DOT;
+import static de.dknapps.mybatter.tokenizer.Token.VALUE_OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.Token.VALUE_SPACE;
 import static de.dknapps.mybatter.tokenizer.TokenizerAction.CONSUME;
 import static de.dknapps.mybatter.tokenizer.TokenizerAction.CONSUME_AND_RECURSE_AND_RETURN_TOKEN;
@@ -298,12 +300,9 @@ public class Tokenizer {
 				inXmlTag = true;
 			}
 			return CONSUME_AND_RECURSE_AND_RETURN_TOKEN;
-		} else if (upcomingStartsWith(VALUE_COMMA)) {
-			if (!token.isEmpty()) {
-				return RETURN_PREVIOUS_TOKEN;
-			}
-			return CONSUME_AND_RETURN_TOKEN;
-		} else if (upcomingStartsWith(VALUE_DOT)) {
+		} else if (upcomingStartsWith(VALUE_COMMA) || upcomingStartsWith(VALUE_DOT)
+				|| upcomingStartsWith(VALUE_OPENING_PARENTHESIS)
+				|| upcomingStartsWith(VALUE_CLOSING_PARENTHESIS)) {
 			if (!token.isEmpty()) {
 				return RETURN_PREVIOUS_TOKEN;
 			}

@@ -131,8 +131,8 @@ public class Formatter {
 		addFormats(SQL_COMMENT, new Format(0, 0, 1), new Format(1, 0, 0));
 		addFormats(COMMA, new Format(0, 0, 0), new Format(1, 0, 0));
 		addFormats(DOT, CLOSE_BY, CLOSE_BY);
-		addFormats(OPENING_PARENTHESIS, new Format(0, 0, 0), new Format(1, 1, 0));
-		addFormats(CLOSING_PARENTHESIS, new Format(1, -1, 0), new Format(1, 0, 0));
+		addFormats(OPENING_PARENTHESIS, new Format(0, 0, 1), new Format(1, 1, 0));
+		addFormats(CLOSING_PARENTHESIS, new Format(1, -1, 0), new Format(1, 0, 1));
 		addFormats(TERM, SPACE, SPACE);
 
 		addFormats(XML_TAG, new Format(1, 0, 0), new Format(1, 1, 0));

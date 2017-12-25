@@ -19,6 +19,7 @@ package de.dknapps.mybatter.tokenizer;
 
 import static de.dknapps.mybatter.tokenizer.TokenType.CHARACTER_DATA;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_ENCLOSING_XML_TAG;
+import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_PRIMARY_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.CLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.COMMA;
@@ -26,6 +27,7 @@ import static de.dknapps.mybatter.tokenizer.TokenType.DOCUMENT_DECLARATION;
 import static de.dknapps.mybatter.tokenizer.TokenType.DOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.ENCLOSING_XML_TAG;
 import static de.dknapps.mybatter.tokenizer.TokenType.MYBATIS_REFERENCE;
+import static de.dknapps.mybatter.tokenizer.TokenType.OPENING_PARENTHESIS;
 import static de.dknapps.mybatter.tokenizer.TokenType.PROCESSING_INSTRUCTION;
 import static de.dknapps.mybatter.tokenizer.TokenType.ROOT;
 import static de.dknapps.mybatter.tokenizer.TokenType.SELFCLOSING_ENCLOSING_XML_TAG;
@@ -219,6 +221,33 @@ public class TokenizerTest extends TestCase {
 				"    |mapper|" + TERM, //
 				"  |select|" + SQL_STATEMENT, //
 				"  |*|" + TERM, //
+				"  |from|" + SQL_SUB_STATEMENT, //
+				"  |table1|" + TERM, //
+				"  |<where>|" + XML_TAG, //
+				"    |where|" + SQL_SUB_STATEMENT, //
+				"  |a|" + TERM, //
+				"  |&gt;|" + TERM, //
+				"  |5|" + TERM, //
+				"  |</where>|" + CLOSING_XML_TAG, //
+				"    |where|" + SQL_SUB_STATEMENT, //
+				"  |</mapper>|" + CLOSING_ENCLOSING_XML_TAG, //
+				"    |mapper|" + TERM //
+		};
+		doAssertEquals(output, input);
+	}
+
+	@Test
+	public void test_sql_02() {
+		String input = "<mapper>select count(*) from table1 <where> a &gt; 5</where></mapper>";
+		String output[] = new String[] { //
+				"|...|" + ROOT, //
+				"  |<mapper>|" + ENCLOSING_XML_TAG, //
+				"    |mapper|" + TERM, //
+				"  |select|" + SQL_STATEMENT, //
+				"  |count|" + TERM, //
+				"  |(|" + OPENING_PARENTHESIS, //
+				"  |*|" + TERM, //
+				"  |)|" + CLOSING_PARENTHESIS, //
 				"  |from|" + SQL_SUB_STATEMENT, //
 				"  |table1|" + TERM, //
 				"  |<where>|" + XML_TAG, //

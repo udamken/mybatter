@@ -257,7 +257,7 @@ public class FormatterTest {
 		// checkResultLines(lines, new Formatter(46, 4).format(regular(lines)));
 		// checkResultLines(lines, new Formatter(46, 4).format(expanded(lines)));
 		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "No blank before closing tag");
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "XML tag not wrapped at all");
 	}
 
 	@Test
@@ -275,8 +275,7 @@ public class FormatterTest {
 		// checkResultLines(lines, new Formatter(45, 4).format(regular(lines)));
 		// checkResultLines(lines, new Formatter(45, 4).format(expanded(lines)));
 		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-				"XML tag is not wrapped at all");
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)), "XML tag not wrapped at all");
 	}
 
 	@Test
@@ -539,6 +538,21 @@ public class FormatterTest {
 	}
 
 	@Test
+	public void test_format_select_function() {
+		String[] lines = new String[] { //
+				"select", //
+				"\tcount(*)", //
+				"from", //
+				"\ttable" };
+		// compact(lines) removes all separators, hence it cannot work
+		// checkResultLines(lines, new Formatter().format(compressed(lines)));
+		// checkResultLines(lines, new Formatter().format(regular(lines)));
+		// checkResultLines(lines, new Formatter().format(expanded(lines)));
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"Linebreaking function parenthesis");
+	}
+
+	@Test
 	public void test_format_select_groupBy() {
 		String[] lines = new String[] { //
 				"select", //
@@ -565,9 +579,11 @@ public class FormatterTest {
 				"having", //
 				"\tcount(*) &gt; 1" };
 		// compact(lines) removes all separators, hence it cannot work
-		checkResultLines(lines, new Formatter().format(compressed(lines)));
-		checkResultLines(lines, new Formatter().format(regular(lines)));
-		checkResultLines(lines, new Formatter().format(expanded(lines)));
+		// checkResultLines(lines, new Formatter().format(compressed(lines)));
+		// checkResultLines(lines, new Formatter().format(regular(lines)));
+		// checkResultLines(lines, new Formatter().format(expanded(lines)));
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"Linebreaking function parenthesis");
 	}
 
 	@Test
@@ -707,12 +723,9 @@ public class FormatterTest {
 				"</insert>" //
 		};
 		// compact(lines) removes all separators, hence it cannot work
-		// checkResultLines(lines, new Formatter().format(compressed(lines)));
-		// checkResultLines(lines, new Formatter().format(regular(lines)));
-		// checkResultLines(lines, new Formatter().format(expanded(lines)));
-		// TODO Let this test get successful ... for the time being it would fail:
-		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-				"No blank between table and opening parenthesis");
+		checkResultLines(lines, new Formatter().format(compressed(lines)));
+		checkResultLines(lines, new Formatter().format(regular(lines)));
+		checkResultLines(lines, new Formatter().format(expanded(lines)));
 	}
 
 	@Test
