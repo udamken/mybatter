@@ -1,7 +1,7 @@
 /*
  * MyBatter - Formats your MyBatis mapper XML files
  *
- *     Copyright (C) 2017 Uwe Damken
+ *     Copyright (C) 2017-2018 Uwe Damken
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package de.dknapps.mybatter.main;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,7 +47,7 @@ public class MyBatter {
 	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	/** Only files with a name matching this pattern get formatted in directories */
-	private static final String DEFAULT_GLOB = "*.xml";
+	private static final String DEFAULT_GLOB = "[!~]*.xml";
 
 	/** Stream to print messages to that shall go to /dev/null */
 	private static final PrintStream NULL_PRINT_STREAM = new PrintStream(NullOutputStream.NULL_OUTPUT_STREAM);
@@ -67,12 +68,15 @@ public class MyBatter {
 			} else {
 				String encoding = commandLine.getOptionValue("e", DEFAULT_ENCODING);
 				String suffix = commandLine.getOptionValue("g", DEFAULT_GLOB);
+				boolean keep = commandLine.hasOption("k");
+				boolean override = commandLine.hasOption("o");
 				if (commandLine.hasOption("s")) {
 					stderr = NULL_PRINT_STREAM;
 				} else if (commandLine.hasOption("v")) {
 					stdout = System.out;
 				}
-				pathList.stream().forEach(path -> formatFileOrDirectory(path, suffix, encoding));
+				pathList.stream()
+						.forEach(path -> formatFileOrDirectory(path, suffix, encoding, keep, override));
 			}
 		} catch (ParseException e) {
 			stderr.println(e.getLocalizedMessage());
@@ -94,8 +98,12 @@ public class MyBatter {
 				.desc("in directories format only files with names matching the pattern (default is "
 						+ DEFAULT_GLOB + "), be sure to escape the pattern according to your environment")
 				.build());
+		options.addOption(Option.builder("k").longOpt("keep")
+				.desc("keep original files, start names of formatted files with a ~").build());
+		options.addOption(Option.builder("o").longOpt("override")
+				.desc("override backup files silently (names start with a ~)").build());
 		options.addOption(Option.builder("s").longOpt("silent")
-				.desc("suppress all messages, ignores verbose option").build());
+				.desc("ignore verbose option and suppress all messages, even error messages").build());
 		options.addOption(Option.builder("v").longOpt("verbose")
 				.desc("print names and number of formatted files").build());
 		return options;
@@ -113,22 +121,31 @@ public class MyBatter {
 	/**
 	 * Formats the given file or all files in the given directory.
 	 * 
+	 * @param glob
+	 *            The pattern according to {@link Files#newDirectoryStream(Path, String)} which in turn links
+	 *            to {@link FileSystem#getPathMatcher(String)}
+	 * @param encoding
+	 *            encoding to be used when reading and writing the files
+	 * @param keep
+	 *            True to keep original files, start names of formatted files with a ~
+	 * @param override
+	 *            True to override backup files silently (names starting with a ~)
 	 * @param path
 	 *            The file or directory.
-	 * @param glob
-	 *            The pattern according to {@link Files#newDirectoryStream(Path, String)}
+	 * 
 	 * @throws IOException
 	 */
-	private static void formatFileOrDirectory(String fileOrDirectory, String glob, String encoding) {
+	private static void formatFileOrDirectory(String fileOrDirectory, String glob, String encoding,
+			boolean keep, boolean override) {
 		try {
 			Path path = Paths.get(fileOrDirectory);
 			File file = path.toFile();
 			if (file.isFile()) {
-				formatFile(file, encoding);
+				formatFile(file, encoding, keep, override);
 			} else if (file.isDirectory()) {
 				int formattedFilesCount = 0;
 				for (Path filePath : Files.newDirectoryStream(path, glob)) {
-					formatFile(filePath.toFile(), encoding);
+					formatFile(filePath.toFile(), encoding, keep, override);
 					formattedFilesCount++;
 				}
 				stdout.println(formattedFilesCount + " file(s) formatted");
@@ -136,7 +153,7 @@ public class MyBatter {
 				stderr.println(fileOrDirectory + " is neither a file nor a directory");
 			}
 		} catch (IOException e) {
-			stderr.println("Cannot format " + fileOrDirectory + ":" + e.getLocalizedMessage());
+			stderr.println("Cannot format '" + fileOrDirectory + "': " + e.getLocalizedMessage());
 		}
 	}
 
@@ -145,24 +162,34 @@ public class MyBatter {
 	 * 
 	 * @param file
 	 *            The file.
+	 * @param encoding
+	 *            encoding to be used when reading and writing the files
+	 * @param keep
+	 *            True to keep original file, start name of formatted file with a ~
+	 * @param override
+	 *            True to override backup file silently (name starting with a ~)
 	 * @throws IOException
 	 */
-	private static void formatFile(File file, String encoding) {
+	private static void formatFile(File file, String encoding, boolean keep, boolean override) {
 		try {
 			stdout.println(file.getAbsolutePath());
 			String input = FileUtils.readFileToString(file, encoding);
 			String output = new Formatter().format(input);
 			File backup = new File(file.getParent(), "~" + file.getName());
-			if (backup.exists()) {
-				stderr.println("Cannot backup " + file.getAbsolutePath() + " to " + backup.getAbsolutePath()
-						+ " because it already exists");
+			if (backup.exists() && !override) {
+				stderr.println(
+						"Cannot format '" + file.getAbsolutePath() + "' into '" + backup.getAbsolutePath()
+								+ "' because it already exists, use option -o to silently delete it");
 			} else {
-				file.renameTo(backup);
-				FileUtils.write(file, output, encoding);
 				backup.delete();
+				FileUtils.write(backup, output, encoding);
+				if (!keep) {
+					file.delete();
+					backup.renameTo(file);
+				}
 			}
 		} catch (IOException e) {
-			stderr.println("Cannot format " + file.getAbsolutePath() + ":" + e.getLocalizedMessage());
+			stderr.println("Cannot format '" + file.getAbsolutePath() + "': " + e.getLocalizedMessage());
 		}
 	}
 
