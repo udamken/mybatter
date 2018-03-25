@@ -322,6 +322,27 @@ public class FormatterTest {
 	}
 
 	@Test
+	public void test_format_select_whereViaXmlTag() {
+		String[] lines = new String[] { //
+				"<select>", //
+				"\tselect", //
+				"\t\ta", //
+				"\tfrom", //
+				"\t\ttable", //
+				"\t<where>", //
+				"\t\ta = 'A'", //
+				"\t</where>", //
+				"</select>" };
+		// compact(lines) removes all separators, hence it cannot work
+		// checkResultLines(lines, new Formatter().format(compressed(lines)));
+		// checkResultLines(lines, new Formatter().format(regular(lines)));
+		// checkResultLines(lines, new Formatter().format(expanded(lines)));
+		// TODO Let this test get successful ... for the time being it would fail:
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"XML tag <where> indented ore than SQL WHERE would be");
+	}
+
+	@Test
 	public void test_format_select_withUr() {
 		String[] lines = new String[] { //
 				"<select>", //
@@ -337,9 +358,32 @@ public class FormatterTest {
 		checkResultLines(lines, new Formatter().format(compressed(lines)));
 		checkResultLines(lines, new Formatter().format(regular(lines)));
 		checkResultLines(lines, new Formatter().format(expanded(lines)));
+	}
+
+	@Test
+	public void test_format_select_nestedXmlTags() {
+		String[] lines = new String[] { //
+				"<select>", //
+				"\tselect", //
+				"\t\ta", //
+				"\tfrom", //
+				"\t\ttable", //
+				"\t<where>", //
+				"\t\t<if test=\"a != null>", //
+				"\t\t\tAND a = 'A'", //
+				"\t\t</if>", //
+				"\t\t<if test=\"b != null>", //
+				"\t\t\tAND b = 'B'", //
+				"\t\t</if>", //
+				"\t</where>", //
+				"</select>" };
+		// compact(lines) removes all separators, hence it cannot work
+		// checkResultLines(lines, new Formatter().format(compressed(lines)));
+		// checkResultLines(lines, new Formatter().format(regular(lines)));
+		// checkResultLines(lines, new Formatter().format(expanded(lines)));
 		// TODO Let this test get successful ... for the time being it would fail:
-		// printExpectedDeviation(lines, new Formatter().format(regular(lines)),
-		// "Closing select xml tag erroneously indented");
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"Nested XML tags wrongly indented and unindented");
 	}
 
 	@Test
@@ -726,6 +770,36 @@ public class FormatterTest {
 		checkResultLines(lines, new Formatter().format(compressed(lines)));
 		checkResultLines(lines, new Formatter().format(regular(lines)));
 		checkResultLines(lines, new Formatter().format(expanded(lines)));
+	}
+
+	@Test
+	public void test_format_insert_selectKey() {
+		String[] lines = new String[] { //
+				"<insert>", //
+				"\t<selectKey keyProperty=\"model.id\" resultType=\"long\" order=\"BEFORE\">", //
+				"\t\tSELECT NEXT VALUE FOR SEQUENCE FROM SYSIBM.SYSDUMMY1", //
+				"\t</selectKey>", //
+				"\tINSERT INTO", //
+				"\t\t${owner}.table (", //
+				"\t\t\tid,", //
+				"\t\t\tfield1,", //
+				"\t\t\tfield2", //
+				"\t\t)", //
+				"\tVALUES", //
+				"\t\t(", //
+				"\t\t\tmodel.id,", //
+				"\t\t\tvalue1,", //
+				"\t\t\tvalue2", //
+				"\t\t)", //
+				"</insert>" //
+		};
+		// compact(lines) removes all separators, hence it cannot work
+		// checkResultLines(lines, new Formatter().format(compressed(lines)));
+		// checkResultLines(lines, new Formatter().format(regular(lines)));
+		// checkResultLines(lines, new Formatter().format(expanded(lines)));
+		// TODO Let this test get successful ... for the time being it would fail:
+		printExpectedDeviation(lines, new Formatter().format(regular(lines)),
+				"Closing XML tag not unindented as expected");
 	}
 
 	@Test

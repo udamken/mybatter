@@ -264,6 +264,47 @@ public class TokenizerTest extends TestCase {
 	}
 
 	@Test
+	public void test_sql_03() {
+		String input = "<mapper>select * from table1 <where><if test=\"a != null\">AND a = #{a}</if><if test=\"b != null\">AND b = #{b}</if></where></mapper>";
+		String output[] = new String[] { //
+				"|...|" + ROOT, //
+				"  |<mapper>|" + ENCLOSING_XML_TAG, //
+				"    |mapper|" + TERM, //
+				"  |select|" + SQL_STATEMENT, //
+				"  |*|" + TERM, //
+				"  |from|" + SQL_SUB_STATEMENT, //
+				"  |table1|" + TERM, //
+				"  |<where>|" + XML_TAG, //
+				"    |where|" + SQL_SUB_STATEMENT, //
+				"  |<if test=\"a != null\">|" + XML_TAG, //
+				"    |if|" + TERM, //
+				"    |test=|" + TERM, //
+				"    |\"a != null\"|" + STRING, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
+				"  |a|" + TERM, //
+				"  |=|" + TERM, //
+				"  |#{a}|" + MYBATIS_REFERENCE, //
+				"  |</if>|" + CLOSING_XML_TAG, //
+				"    |if|" + TERM, //
+				"  |<if test=\"b != null\">|" + XML_TAG, //
+				"    |if|" + TERM, //
+				"    |test=|" + TERM, //
+				"    |\"b != null\"|" + STRING, //
+				"  |AND|" + SQL_DYADIC_OPERATOR, //
+				"  |b|" + TERM, //
+				"  |=|" + TERM, //
+				"  |#{b}|" + MYBATIS_REFERENCE, //
+				"  |</if>|" + CLOSING_XML_TAG, //
+				"    |if|" + TERM, //
+				"  |</where>|" + CLOSING_XML_TAG, //
+				"    |where|" + SQL_SUB_STATEMENT, //
+				"  |</mapper>|" + CLOSING_ENCLOSING_XML_TAG, //
+				"    |mapper|" + TERM //
+		};
+		doAssertEquals(output, input);
+	}
+
+	@Test
 	public void test_openingXmlTagWithOneArgument_01() {
 		String input = "<mapper arg1=\"'test  >  4711'>\">";
 		String output[] = new String[] { //
