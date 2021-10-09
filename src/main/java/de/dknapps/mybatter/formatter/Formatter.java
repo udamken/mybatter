@@ -278,7 +278,7 @@ public class Formatter {
 	 * @param first
 	 *            The first format.
 	 * @param second
-	 *            The first format.
+	 *            The second format.
 	 * @return A joined format.
 	 */
 	private Format joinFormats(Format first, Format second) {
