@@ -37,7 +37,7 @@ public class Format {
 	@Getter
 	private final int indentionDelta;
 
-	/** Number of blanks to add (+) or substract (-) when writing this format */
+	/** Number of blanks to add (+) or subtract (-) when writing this format */
 	@Getter
 	private final int blankCount;
 
